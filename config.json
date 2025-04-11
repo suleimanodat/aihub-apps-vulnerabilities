@@ -22,5 +22,5 @@
     "testing": {
         "regression": {}
     },
-    "release_notes": "Snapshot for published app 0.0.2. It includes initial classification prompts for BNYM, CITI, BOFA Snyk & Twistlock. It also includes initial BNYM scripts to identify the header row and required columns, and to use the identified header as WIP for intake sheet extraction"
+    "release_notes": "Snapshot + .github[CICD] -  for published app 0.0.2. It includes initial classification prompts for BNYM, CITI, BOFA Snyk & Twistlock. It also includes initial BNYM scripts to identify the header row and required columns, and to use the identified header as WIP for intake sheet extraction"
 }
