@@ -1,0 +1,58 @@
+{
+    "8423": {
+        "args": [],
+        "code": "\timport json\n\t\n\trequired_columns = [\"CVE\", \"Likelihood\", \"Scan_Source_UID\", \"Solution\", \"Title\"]\n\t\n\tres = [\n\t  {\"Item\": \"Header Row#\", \"Value\": \"\"},\n\t  {\"Item\": \"Sheet Name\", \"Value\": \"\"}\n\t]\n\tfor col in required_columns:\n\t  res.append({\"Item\": f'{col} Column', \"Value\": \"\"})\n\t\n\ttry:\n\t  sheet_info = json.loads(context['document_text'])[0]\n\t  res[1][\"Value\"] = sheet_info[\"name\"]\n\t\n\t  table = sheet_info[\"table\"][:10]\n\t  header = None\n\t  header_index = None\n\t  indices = []\n\t  for i, row in enumerate(table):\n\t    for col in required_columns:\n\t      try:\n\t        indices.append(row.index(col))\n\t      except ValueError:\n\t        indices = []\n\t        break\n\t\n\t    if len(indices) == len(required_columns):\n\t      header = row\n\t      header_index = i\n\t      break\n\t\n\t  if header:\n\t    res[0][\"Value\"] = header_index + 1\n\t    for i, idx in enumerate(indices):\n\t      res[i + 2][\"Value\"] = header[idx]\n\t  else:\n\t    fail = 1 / 0\n\texcept:\n\t  for reset in res:\n\t    reset[\"Value\"] = \"\"\n\t\n\treturn res",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:3291816198:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744321886000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    },
+    "8427": {
+        "args": [
+            {
+                "data_type": "FIELD",
+                "name": "Header_Mapping",
+                "value": "Header Mapping"
+            }
+        ],
+        "code": "\t\n\t# Developer note: assume that Header_Mapping is correct here. Advanced\n\t#  app will be modified to get the correct results from Human Review\n\t#  and cascade it the step executing this script\n\t\n\timport json\n\t\n\tcolumns = [\"cve\", \"etc\"]\n\tres = [{col: \"\" for col in columns}]\n\t\n\theader_mapping = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE Column\", \"Value\": \"CVE\"}, {\"Item\": \"Likelihood Column\", \"Value\": \"Likelihood\"}, {\"Item\": \"Scan_Source_UID Column\", \"Value\": \"Scan_Source_UID\"}, {\"Item\": \"Solution Column\", \"Value\": \"Solution\"}, {\"Item\": \"Title Column\", \"Value\": \"Title\"}\n\ttable = None\n\ttry:\n\t  header_mapping = json.loads(Header_Mapping)\n\t  header_mapping[0][\"Value\"] = int(header_mapping[0][\"Value\"])\n\t\n\t  sheets = json.loads(context['document_text'])\n\t  for sheet in sheets:\n\t    if header_mapping[1][\"Value\"] == sheet[\"name\"]:\n\t      table = sheet[\"table\"]\n\t      break\n\t\n\t  if not table:\n\t    return res\n\texcept:\n\t  return res\n\t\n\theader = table[header_mapping[0][\"Value\"] - 1]\n\ttable = table[header_mapping[0][\"Value\"]:]\n\tcve_idx = header.index(header_mapping[2][\"Value\"])\n\tlikelihood_idx = header.index(header_mapping[3][\"Value\"])\n\tss_uuid_idx = header.index(header_mapping[4][\"Value\"])\n\tsolution_idx = header.index(header_mapping[5][\"Value\"])\n\ttitle_idx = header.index(header_mapping[6][\"Value\"])\n\t\n\tres[0] = {col: \"all others for {col}\" for col in columns}\n\t\n\treturn res",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:3007242413:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744323282000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    },
+    "8428": {
+        "args": [
+            {
+                "data_type": "FIELD",
+                "name": "Header_Mapping",
+                "value": "Header Mapping"
+            }
+        ],
+        "code": "\treturn \"Please review the Header Mapping information.\"",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:3049083658:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744319260000",
+        "name": "unnamed_custom_function",
+        "udf_type": "VALIDATIONS"
+    },
+    "8446": {
+        "args": [],
+        "code": "\treturn context['document_text']",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:1428750426:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744400588000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    }
+}

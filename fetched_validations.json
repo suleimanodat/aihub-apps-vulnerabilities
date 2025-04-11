@@ -1,0 +1,96 @@
+{
+    "last_updated": 1744319261000,
+    "rules": [
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744293676000,
+            "description": "Classification validation",
+            "id": 9619,
+            "input_fields": [],
+            "name": "Rule 1",
+            "params": {
+                "affected_classes": [
+                    171384
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744293676000
+        },
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744293690000,
+            "description": "Classification validation",
+            "id": 9620,
+            "input_fields": [],
+            "name": "Rule 2",
+            "params": {
+                "affected_classes": [
+                    171382
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744293690000
+        },
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744300960000,
+            "description": "Classification validation",
+            "id": 9624,
+            "input_fields": [],
+            "name": "Rule 3",
+            "params": {
+                "affected_classes": [
+                    171455
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744300960000
+        },
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744301036000,
+            "description": "Classification validation",
+            "id": 9625,
+            "input_fields": [],
+            "name": "Rule 4",
+            "params": {
+                "affected_classes": [
+                    171486
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744301036000
+        },
+        {
+            "affected_fields": [
+                531932
+            ],
+            "alert_level": "FAILURE",
+            "created_at": 1744319225000,
+            "description": "",
+            "id": 9628,
+            "input_fields": [
+                531932
+            ],
+            "name": "Rule 5",
+            "params": {
+                "udf_id": 8428
+            },
+            "scope": "FIELD",
+            "type": "UDF",
+            "updated_at": 1744319261000
+        }
+    ]
+}

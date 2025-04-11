@@ -1,0 +1,74 @@
+{
+    "171382": {
+        "description": "A sheet that has header: Scan_Source, Scan_Source_UID, Title, Priority, Appl_Mnemonic, Application_Component_Name, IT_App_Mgr, Remediation_Owner, Is_GreenField, Host_Name, TTR_Date, First_Detected, Last_Detected, Last_Reopened, CVE, DNS, IP, Port, Qualys_OS, Results, Solution, Host_Device_Type, Host_Device_Type_Group_Name, Envir_Class_Name, OS_Name, TTR_Bucket, Beyond_TTR_Bucket, Taxonomy_LOB, CIO_NAME, Appdev_Link, Likelihood, Risk_Classification, Retest_Status, Retest_Date, Vuln_ID, Assignee, Assignee_Group, Device_Function, Base_Image_Version, Component_Layer, Most_Recent_Comments, Remediation_Target_Date, Remediation_Plan, Remediation_Reference_ID, Label, Comments, Exception_ID, Exception_Expiry_Date, Exception_Approval_Status, ControlIssue_ID, ControlIssue_Status, ControlIssue_Remediation_Due_Date, Diagnosis, User_Name, MU_Manager, NetBIOS, SAA, L2_Manager, L3_Manager, Content_Source, AIM, Category, Policy_Compliant, Affected_URLs, RequestID",
+        "fields": {
+            "531932": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [],
+                        "function_id": 8423,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Header Mapping",
+                "position": 0,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            },
+            "533438": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Header_Mapping",
+                                "value": "Header Mapping"
+                            }
+                        ],
+                        "function_id": 8427,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Intake Sheet",
+                "position": 1,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            }
+        },
+        "name": "BNYM"
+    },
+    "171383": {
+        "description": "",
+        "fields": {},
+        "name": "Other"
+    },
+    "171384": {
+        "description": "A sheet that has header: ASSESSMENT, Discovery Items Assessment, Broadcom Reason (VENDOR DEPENDENT), Severity, Implication/Risk of having critical, Repository, Tag, Scan Time, Pass, Type, Distro, CVE ID, Compliance ID, Type_1, Severity22, Packages, Source Package, Package Version, Package License, CVSS, Fix Status, Fix Date, Grace Days, Vulnerability Tags, Description, Cause, Published, Custom Labels, Vulnerability Link, Unique Identifier",
+        "fields": {},
+        "name": "CITI"
+    },
+    "171455": {
+        "description": "A sheet that has header: ISSUE_SEVERITY_RANK, ISSUE_SEVERITY, PROBLEM_TITLE, CVE, PROJECT_NAME, PRODUCT_NAME, PACKAGE_NAME_AND_VERSION, SEMVER_VULNERABLE_RANGE",
+        "fields": {},
+        "name": "BOFA Snyk_Scan"
+    },
+    "171486": {
+        "description": "A sheet that has header: Registry, Repository, Tag, Id, Scan Time, Pass, Type, Distro, Hostname, Layer, CVE ID, Compliance ID, Type, Severity, Packages, Source Package, Package Version, Package License, CVSS, Fix Status, Fix Date, Grace Days, Vulnerability Tags, Description, Cause, Published, Custom Labels, Vulnerability Link",
+        "fields": {},
+        "name": "BOFA Twistlock_Scan"
+    },
+    "last_edited_at": "1744408101000",
+    "last_edited_class_at": "1744301030000"
+}

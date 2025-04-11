@@ -1,0 +1,319 @@
+{
+    "project_data": {
+        "activeDeployedSolutionId": "4418aa35-fee9-4958-b97c-bcac2ed3f189",
+        "createdAtMs": "1744293560000",
+        "creationBase": "NONE",
+        "dataMountPath": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22",
+        "description": "New project",
+        "id": "01961fff-7e83-77e8-9597-1991d37d8f22",
+        "llm": "gpt-3.5-turbo",
+        "name": "Vulnerabilities App",
+        "owner": "dd5ad94a-9183-4379-8197-e55ac60e371c",
+        "ownerPublicId": "suleiman.odat",
+        "projectMountPath": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22",
+        "repoId": "98821aa8-fd02-43d9-9ae0-2b958213c050",
+        "schemaVersion": "1",
+        "settings": {},
+        "type": "BUILD",
+        "updatedAtMs": "1744293580000",
+        "workspace": "SolEng_workspace"
+    },
+    "project_schema": {
+        "BNYM": {
+            "class_id": "171382",
+            "description": "A sheet that has header: Scan_Source, Scan_Source_UID, Title, Priority, Appl_Mnemonic, Application_Component_Name, IT_App_Mgr, Remediation_Owner, Is_GreenField, Host_Name, TTR_Date, First_Detected, Last_Detected, Last_Reopened, CVE, DNS, IP, Port, Qualys_OS, Results, Solution, Host_Device_Type, Host_Device_Type_Group_Name, Envir_Class_Name, OS_Name, TTR_Bucket, Beyond_TTR_Bucket, Taxonomy_LOB, CIO_NAME, Appdev_Link, Likelihood, Risk_Classification, Retest_Status, Retest_Date, Vuln_ID, Assignee, Assignee_Group, Device_Function, Base_Image_Version, Component_Layer, Most_Recent_Comments, Remediation_Target_Date, Remediation_Plan, Remediation_Reference_ID, Label, Comments, Exception_ID, Exception_Expiry_Date, Exception_Approval_Status, ControlIssue_ID, ControlIssue_Status, ControlIssue_Remediation_Due_Date, Diagnosis, User_Name, MU_Manager, NetBIOS, SAA, L2_Manager, L3_Manager, Content_Source, AIM, Category, Policy_Compliant, Affected_URLs, RequestID",
+            "fields": [
+                {
+                    "data_type": "TEXT",
+                    "description": "",
+                    "field_id": "531932",
+                    "lines": [
+                        {
+                            "function_args": [],
+                            "function_id": 8423,
+                            "line_type": "UDF",
+                            "native_fn_name": null,
+                            "prompt": null
+                        }
+                    ],
+                    "model_type": "DEFAULT",
+                    "name": "Header Mapping",
+                    "position": 0,
+                    "prompt": "",
+                    "prompt_schema": null,
+                    "prompt_type": "udf"
+                },
+                {
+                    "data_type": "TEXT",
+                    "description": "",
+                    "field_id": "533438",
+                    "lines": [
+                        {
+                            "function_args": [
+                                {
+                                    "data_type": "FIELD",
+                                    "name": "Header_Mapping",
+                                    "value": "Header Mapping"
+                                }
+                            ],
+                            "function_id": 8427,
+                            "line_type": "UDF",
+                            "native_fn_name": null,
+                            "prompt": null
+                        }
+                    ],
+                    "model_type": "DEFAULT",
+                    "name": "Intake Sheet",
+                    "position": 1,
+                    "prompt": "",
+                    "prompt_schema": null,
+                    "prompt_type": "udf"
+                }
+            ]
+        },
+        "BOFA Snyk_Scan": {
+            "class_id": "171455",
+            "description": "A sheet that has header: ISSUE_SEVERITY_RANK, ISSUE_SEVERITY, PROBLEM_TITLE, CVE, PROJECT_NAME, PRODUCT_NAME, PACKAGE_NAME_AND_VERSION, SEMVER_VULNERABLE_RANGE",
+            "fields": []
+        },
+        "BOFA Twistlock_Scan": {
+            "class_id": "171486",
+            "description": "A sheet that has header: Registry, Repository, Tag, Id, Scan Time, Pass, Type, Distro, Hostname, Layer, CVE ID, Compliance ID, Type, Severity, Packages, Source Package, Package Version, Package License, CVSS, Fix Status, Fix Date, Grace Days, Vulnerability Tags, Description, Cause, Published, Custom Labels, Vulnerability Link",
+            "fields": []
+        },
+        "CITI": {
+            "class_id": "171384",
+            "description": "A sheet that has header: ASSESSMENT, Discovery Items Assessment, Broadcom Reason (VENDOR DEPENDENT), Severity, Implication/Risk of having critical, Repository, Tag, Scan Time, Pass, Type, Distro, CVE ID, Compliance ID, Type_1, Severity22, Packages, Source Package, Package Version, Package License, CVSS, Fix Status, Fix Date, Grace Days, Vulnerability Tags, Description, Cause, Published, Custom Labels, Vulnerability Link, Unique Identifier",
+            "fields": []
+        },
+        "Other": {
+            "class_id": "171383",
+            "description": "",
+            "fields": []
+        }
+    },
+    "project_udfs": {
+        "8423": {
+            "args": [],
+            "code": "\n\ndef unnamed_custom_function(context = {}, keys = {}, **kwargs):\n\timport json\n\t\n\trequired_columns = [\"CVE\", \"Likelihood\", \"Scan_Source_UID\", \"Solution\", \"Title\"]\n\t\n\tres = [\n\t  {\"Item\": \"Header Row#\", \"Value\": \"\"},\n\t  {\"Item\": \"Sheet Name\", \"Value\": \"\"}\n\t]\n\tfor col in required_columns:\n\t  res.append({\"Item\": f'{col} Column', \"Value\": \"\"})\n\t\n\ttry:\n\t  sheet_info = json.loads(context['document_text'])[0]\n\t  res[1][\"Value\"] = sheet_info[\"name\"]\n\t\n\t  table = sheet_info[\"table\"][:10]\n\t  header = None\n\t  header_index = None\n\t  indices = []\n\t  for i, row in enumerate(table):\n\t    for col in required_columns:\n\t      try:\n\t        indices.append(row.index(col))\n\t      except ValueError:\n\t        indices = []\n\t        break\n\t\n\t    if len(indices) == len(required_columns):\n\t      header = row\n\t      header_index = i\n\t      break\n\t\n\t  if header:\n\t    res[0][\"Value\"] = header_index + 1\n\t    for i, idx in enumerate(indices):\n\t      res[i + 2][\"Value\"] = header[idx]\n\t  else:\n\t    fail = 1 / 0\n\texcept:\n\t  for reset in res:\n\t    reset[\"Value\"] = \"\"\n\t\n\treturn res",
+            "docstring": null,
+            "function_code": "\timport json\n\t\n\trequired_columns = [\"CVE\", \"Likelihood\", \"Scan_Source_UID\", \"Solution\", \"Title\"]\n\t\n\tres = [\n\t  {\"Item\": \"Header Row#\", \"Value\": \"\"},\n\t  {\"Item\": \"Sheet Name\", \"Value\": \"\"}\n\t]\n\tfor col in required_columns:\n\t  res.append({\"Item\": f'{col} Column', \"Value\": \"\"})\n\t\n\ttry:\n\t  sheet_info = json.loads(context['document_text'])[0]\n\t  res[1][\"Value\"] = sheet_info[\"name\"]\n\t\n\t  table = sheet_info[\"table\"][:10]\n\t  header = None\n\t  header_index = None\n\t  indices = []\n\t  for i, row in enumerate(table):\n\t    for col in required_columns:\n\t      try:\n\t        indices.append(row.index(col))\n\t      except ValueError:\n\t        indices = []\n\t        break\n\t\n\t    if len(indices) == len(required_columns):\n\t      header = row\n\t      header_index = i\n\t      break\n\t\n\t  if header:\n\t    res[0][\"Value\"] = header_index + 1\n\t    for i, idx in enumerate(indices):\n\t      res[i + 2][\"Value\"] = header[idx]\n\t  else:\n\t    fail = 1 / 0\n\texcept:\n\t  for reset in res:\n\t    reset[\"Value\"] = \"\"\n\t\n\treturn res",
+            "id": 8423,
+            "lambda_udf_id": "v1:AWS_LAMBDA:3291816198:insaprd-use2-aihub-prd-docker-default-udf:10",
+            "most_recent_results_path": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22/project/modules/scripts/REFINER/92b5b042-c4ba-40a2-bf7f-e74fcfe1ef29_output.json",
+            "name": "unnamed_custom_function",
+            "project_uuid": "01961fff-7e83-77e8-9597-1991d37d8f22",
+            "return_type": "string",
+            "scripts_full_path": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22/project/modules/scripts/REFINER/92b5b042-c4ba-40a2-bf7f-e74fcfe1ef29.json",
+            "type": "REFINER"
+        },
+        "8427": {
+            "args": [
+                {
+                    "data_type": "FIELD",
+                    "name": "Header_Mapping",
+                    "value": "Header Mapping"
+                }
+            ],
+            "code": "\n\ndef unnamed_custom_function(Header_Mapping, context = {}, keys = {}, **kwargs):\n\t\n\t# Developer note: assume that Header_Mapping is correct here. Advanced\n\t#  app will be modified to get the correct results from Human Review\n\t#  and cascade it the step executing this script\n\t\n\timport json\n\t\n\tcolumns = [\"cve\", \"etc\"]\n\tres = [{col: \"\" for col in columns}]\n\t\n\theader_mapping = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE Column\", \"Value\": \"CVE\"}, {\"Item\": \"Likelihood Column\", \"Value\": \"Likelihood\"}, {\"Item\": \"Scan_Source_UID Column\", \"Value\": \"Scan_Source_UID\"}, {\"Item\": \"Solution Column\", \"Value\": \"Solution\"}, {\"Item\": \"Title Column\", \"Value\": \"Title\"}\n\ttable = None\n\ttry:\n\t  header_mapping = json.loads(Header_Mapping)\n\t  header_mapping[0][\"Value\"] = int(header_mapping[0][\"Value\"])\n\t\n\t  sheets = json.loads(context['document_text'])\n\t  for sheet in sheets:\n\t    if header_mapping[1][\"Value\"] == sheet[\"name\"]:\n\t      table = sheet[\"table\"]\n\t      break\n\t\n\t  if not table:\n\t    return res\n\texcept:\n\t  return res\n\t\n\theader = table[header_mapping[0][\"Value\"] - 1]\n\ttable = table[header_mapping[0][\"Value\"]:]\n\tcve_idx = header.index(header_mapping[2][\"Value\"])\n\tlikelihood_idx = header.index(header_mapping[3][\"Value\"])\n\tss_uuid_idx = header.index(header_mapping[4][\"Value\"])\n\tsolution_idx = header.index(header_mapping[5][\"Value\"])\n\ttitle_idx = header.index(header_mapping[6][\"Value\"])\n\t\n\tres[0] = {col: \"all others for {col}\" for col in columns}\n\t\n\treturn res",
+            "docstring": null,
+            "function_code": "\t\n\t# Developer note: assume that Header_Mapping is correct here. Advanced\n\t#  app will be modified to get the correct results from Human Review\n\t#  and cascade it the step executing this script\n\t\n\timport json\n\t\n\tcolumns = [\"cve\", \"etc\"]\n\tres = [{col: \"\" for col in columns}]\n\t\n\theader_mapping = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE Column\", \"Value\": \"CVE\"}, {\"Item\": \"Likelihood Column\", \"Value\": \"Likelihood\"}, {\"Item\": \"Scan_Source_UID Column\", \"Value\": \"Scan_Source_UID\"}, {\"Item\": \"Solution Column\", \"Value\": \"Solution\"}, {\"Item\": \"Title Column\", \"Value\": \"Title\"}\n\ttable = None\n\ttry:\n\t  header_mapping = json.loads(Header_Mapping)\n\t  header_mapping[0][\"Value\"] = int(header_mapping[0][\"Value\"])\n\t\n\t  sheets = json.loads(context['document_text'])\n\t  for sheet in sheets:\n\t    if header_mapping[1][\"Value\"] == sheet[\"name\"]:\n\t      table = sheet[\"table\"]\n\t      break\n\t\n\t  if not table:\n\t    return res\n\texcept:\n\t  return res\n\t\n\theader = table[header_mapping[0][\"Value\"] - 1]\n\ttable = table[header_mapping[0][\"Value\"]:]\n\tcve_idx = header.index(header_mapping[2][\"Value\"])\n\tlikelihood_idx = header.index(header_mapping[3][\"Value\"])\n\tss_uuid_idx = header.index(header_mapping[4][\"Value\"])\n\tsolution_idx = header.index(header_mapping[5][\"Value\"])\n\ttitle_idx = header.index(header_mapping[6][\"Value\"])\n\t\n\tres[0] = {col: \"all others for {col}\" for col in columns}\n\t\n\treturn res",
+            "id": 8427,
+            "lambda_udf_id": "v1:AWS_LAMBDA:3007242413:insaprd-use2-aihub-prd-docker-default-udf:10",
+            "most_recent_results_path": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22/project/modules/scripts/REFINER/11d03c8f-582b-474c-aa83-83fa1a1c0e24_output.json",
+            "name": "unnamed_custom_function",
+            "project_uuid": "01961fff-7e83-77e8-9597-1991d37d8f22",
+            "return_type": "string",
+            "scripts_full_path": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22/project/modules/scripts/REFINER/11d03c8f-582b-474c-aa83-83fa1a1c0e24.json",
+            "type": "REFINER"
+        },
+        "8428": {
+            "args": [
+                {
+                    "data_type": "FIELD",
+                    "name": "Header_Mapping",
+                    "value": "Header Mapping"
+                }
+            ],
+            "code": "\n\ndef unnamed_custom_function(Header_Mapping, context = {}, keys = {}, **kwargs):\n\treturn \"Please review the Header Mapping information.\"",
+            "docstring": null,
+            "function_code": "\treturn \"Please review the Header Mapping information.\"",
+            "id": 8428,
+            "lambda_udf_id": "v1:AWS_LAMBDA:3049083658:insaprd-use2-aihub-prd-docker-default-udf:10",
+            "most_recent_results_path": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22/project/modules/scripts/VALIDATIONS/8b7ac8a2-2ca1-473d-8a46-bcbbb566aaa8_output.json",
+            "name": "unnamed_custom_function",
+            "project_uuid": "01961fff-7e83-77e8-9597-1991d37d8f22",
+            "return_type": "string",
+            "scripts_full_path": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22/project/modules/scripts/VALIDATIONS/8b7ac8a2-2ca1-473d-8a46-bcbbb566aaa8.json",
+            "type": "VALIDATIONS"
+        }
+    },
+    "project_validations": [
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744293676000,
+            "description": "Classification validation",
+            "id": 9619,
+            "input_fields": [],
+            "name": "Rule 1",
+            "params": {
+                "affected_classes": [
+                    171384
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744293676000
+        },
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744293690000,
+            "description": "Classification validation",
+            "id": 9620,
+            "input_fields": [],
+            "name": "Rule 2",
+            "params": {
+                "affected_classes": [
+                    171382
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744293690000
+        },
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744300960000,
+            "description": "Classification validation",
+            "id": 9624,
+            "input_fields": [],
+            "name": "Rule 3",
+            "params": {
+                "affected_classes": [
+                    171455
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744300960000
+        },
+        {
+            "affected_fields": [],
+            "alert_level": "FAILURE",
+            "created_at": 1744301036000,
+            "description": "Classification validation",
+            "id": 9625,
+            "input_fields": [],
+            "name": "Rule 4",
+            "params": {
+                "affected_classes": [
+                    171486
+                ],
+                "confidence_threshold": 0.99
+            },
+            "scope": "CLASS",
+            "type": "CLASS_CONFIDENCE",
+            "updated_at": 1744301036000
+        },
+        {
+            "affected_fields": [
+                531932
+            ],
+            "alert_level": "FAILURE",
+            "created_at": 1744319225000,
+            "description": "",
+            "id": 9628,
+            "input_fields": [
+                531932
+            ],
+            "name": "Rule 5",
+            "params": {
+                "udf_id": 8428
+            },
+            "scope": "FIELD",
+            "type": "UDF",
+            "updated_at": 1744319261000
+        }
+    ],
+    "reader_profile": {
+        "createdBy": "",
+        "createdOn": 1744293559876,
+        "defaultProfile": "",
+        "foundationVersion": "",
+        "inputPath": null,
+        "lastModifiedBy": "",
+        "lastModifiedOn": 1744293559876,
+        "outputPath": null,
+        "profiles": [
+            {
+                "entitySettings": [],
+                "name": "aihub",
+                "readSettings": {
+                    "add_barcode_identifier": true,
+                    "cache_pdf_results": false,
+                    "correct_inversion": false,
+                    "correct_orientation": false,
+                    "correct_resolution": false,
+                    "correct_resolution_auto": false,
+                    "detect_barcodes": false,
+                    "detect_blurry_files": false,
+                    "dewarp_page": true,
+                    "document_mapping": "document_is_record_skip_empty_page",
+                    "enable_ibdoc_v2": true,
+                    "enable_paragraph_ordering": false,
+                    "enable_table_markdown_enrichment": false,
+                    "encryption_config": null,
+                    "entity_models": [
+                        {
+                            "model_name": "signature_model",
+                            "model_version": "0.0.4"
+                        },
+                        {
+                            "model_name": "barcode_qrcode_detection",
+                            "model_version": "1.0.0"
+                        }
+                    ],
+                    "extract_all_pdf_layers": true,
+                    "find_lines": false,
+                    "fonts": null,
+                    "force_image_ocr": false,
+                    "image_filters": null,
+                    "languages": null,
+                    "layout_algorithm": "layout_algo_spatial",
+                    "model_specific_settings": {
+                        "marx_v1": {
+                            "version": "v3"
+                        }
+                    },
+                    "native_excel_processing": true,
+                    "ocr_page_type": "marx",
+                    "ocr_timeout": null,
+                    "output_format_layout": "layout_per_page",
+                    "output_formats": null,
+                    "page_range_str": "",
+                    "preprocess_excel_files": false,
+                    "process_type": "auto_to_txt",
+                    "produce_metadata_list": true,
+                    "produce_word_metadata": true,
+                    "remove_boxes": false,
+                    "remove_boxes_over_height_percent": null,
+                    "remove_boxes_over_width_percent": null,
+                    "remove_space_wordpolys": true,
+                    "remove_vertical_text": false,
+                    "reorient_words": false,
+                    "repair_pdfs": false,
+                    "scripts_dir": "",
+                    "write_converted_image": true,
+                    "write_thumbnail": true
+                }
+            }
+        ],
+        "schema": "1"
+    }
+}
