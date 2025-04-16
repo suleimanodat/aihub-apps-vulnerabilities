@@ -1,5 +1,5 @@
 {
-    "last_updated": 1744319261000,
+    "last_updated": 1744301036000,
     "rules": [
         {
             "affected_fields": [],
@@ -72,25 +72,6 @@
             "scope": "CLASS",
             "type": "CLASS_CONFIDENCE",
             "updated_at": 1744301036000
-        },
-        {
-            "affected_fields": [
-                531932
-            ],
-            "alert_level": "FAILURE",
-            "created_at": 1744319225000,
-            "description": "",
-            "id": 9628,
-            "input_fields": [
-                531932
-            ],
-            "name": "Rule 5",
-            "params": {
-                "udf_id": 8428
-            },
-            "scope": "FIELD",
-            "type": "UDF",
-            "updated_at": 1744319261000
         }
     ]
 }

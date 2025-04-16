@@ -1,7 +1,7 @@
 {
     "projects": [
         {
-            "active_deployed_solution_id": "4418aa35-fee9-4958-b97c-bcac2ed3f189",
+            "active_deployed_solution_id": "073f89ee-bf8e-49b2-9e5e-41161b29161a",
             "createdAtMs": "1744293560000",
             "creation_base": "NONE",
             "data_root": "ib-internal/SolEng_workspace/fs/Instabase Drive/aihub/01961fff-7e83-77e8-9597-1991d37d8f22",
@@ -92,7 +92,7 @@
             },
             "repo_id": "98821aa8-fd02-43d9-9ae0-2b958213c050",
             "settings": {},
-            "updatedAtMs": "1744293580000",
+            "updatedAtMs": "1744647068000",
             "workspace": "SolEng_workspace"
         }
     ]

@@ -1,12 +1,12 @@
 {
     "8423": {
         "args": [],
-        "code": "\timport json\n\t\n\trequired_columns = [\"CVE\", \"Likelihood\", \"Scan_Source_UID\", \"Solution\", \"Title\"]\n\t\n\tres = [\n\t  {\"Item\": \"Header Row#\", \"Value\": \"\"},\n\t  {\"Item\": \"Sheet Name\", \"Value\": \"\"}\n\t]\n\tfor col in required_columns:\n\t  res.append({\"Item\": f'{col} Column', \"Value\": \"\"})\n\t\n\ttry:\n\t  sheet_info = json.loads(context['document_text'])[0]\n\t  res[1][\"Value\"] = sheet_info[\"name\"]\n\t\n\t  table = sheet_info[\"table\"][:10]\n\t  header = None\n\t  header_index = None\n\t  indices = []\n\t  for i, row in enumerate(table):\n\t    for col in required_columns:\n\t      try:\n\t        indices.append(row.index(col))\n\t      except ValueError:\n\t        indices = []\n\t        break\n\t\n\t    if len(indices) == len(required_columns):\n\t      header = row\n\t      header_index = i\n\t      break\n\t\n\t  if header:\n\t    res[0][\"Value\"] = header_index + 1\n\t    for i, idx in enumerate(indices):\n\t      res[i + 2][\"Value\"] = header[idx]\n\t  else:\n\t    fail = 1 / 0\n\texcept:\n\t  for reset in res:\n\t    reset[\"Value\"] = \"\"\n\t\n\treturn res",
+        "code": "\timport json\n\tfrom datetime import datetime\n\t\n\tdtime = datetime.now().strftime(\"%Y_%m_%d_%H:%M:%S\")\n\t\n\tfname = context['file_path'].split('/')[-1]\n\tfname = fname.split('__')\n\tfname = fname[0] if len(fname) == 1 else fname[1]\n\t\n\trequired_columns = [\"CVE\", \"Likelihood\", \"Scan_Source_UID\", \"Solution\", \"Title\"]\n\t\n\tres = [\n\t  {\"Item\": \"Header Row#\", \"Value\": \"\"},\n\t  {\"Item\": \"Sheet Name\", \"Value\": \"\"}\n\t]\n\tfor col in required_columns:\n\t  res.append({\"Item\": f'{col} Column', \"Value\": \"\"})\n\tres.append({\"Item\": 'Extraction ID', \"Value\": f\"BNYM_{dtime}_{fname}\"})\n\t\n\ttry:\n\t  sheet_info = json.loads(context['document_text'])[0]\n\t  res[1][\"Value\"] = sheet_info[\"name\"]\n\t\n\t  table = sheet_info[\"table\"][:10]\n\t  header = None\n\t  header_index = None\n\t  indices = []\n\t  for i, row in enumerate(table):\n\t    for col in required_columns:\n\t      try:\n\t        indices.append(row.index(col))\n\t      except ValueError:\n\t        indices = []\n\t        break\n\t\n\t    if len(indices) == len(required_columns):\n\t      header = row\n\t      header_index = i\n\t      break\n\t\n\t  if header:\n\t    res[0][\"Value\"] = header_index + 1\n\t    for i, idx in enumerate(indices):\n\t      res[i + 2][\"Value\"] = header[idx]\n\t  else:\n\t    fail = 1 / 0\n\texcept:\n\t  for reset in res:\n\t    reset[\"Value\"] = \"\"\n\t\n\treturn res",
         "docstring": null,
         "lambda_end_of_life": null,
         "lambda_id": "11",
         "lambda_udf_id": "v1:AWS_LAMBDA:3291816198:insaprd-use2-aihub-prd-docker-default-udf:10",
-        "last_updated_at": "1744321886000",
+        "last_updated_at": "1744822759000",
         "name": "unnamed_custom_function",
         "udf_type": "REFINER"
     },
@@ -14,16 +14,16 @@
         "args": [
             {
                 "data_type": "FIELD",
-                "name": "Header_Mapping",
-                "value": "Header Mapping"
+                "name": "Extraction_Metadata",
+                "value": "Extraction Metadata"
             }
         ],
-        "code": "\t\n\t# Developer note: assume that Header_Mapping is correct here. Advanced\n\t#  app will be modified to get the correct results from Human Review\n\t#  and cascade it the step executing this script\n\t\n\timport json\n\t\n\tcolumns = [\"cve\", \"etc\"]\n\tres = [{col: \"\" for col in columns}]\n\t\n\theader_mapping = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE Column\", \"Value\": \"CVE\"}, {\"Item\": \"Likelihood Column\", \"Value\": \"Likelihood\"}, {\"Item\": \"Scan_Source_UID Column\", \"Value\": \"Scan_Source_UID\"}, {\"Item\": \"Solution Column\", \"Value\": \"Solution\"}, {\"Item\": \"Title Column\", \"Value\": \"Title\"}\n\ttable = None\n\ttry:\n\t  header_mapping = json.loads(Header_Mapping)\n\t  header_mapping[0][\"Value\"] = int(header_mapping[0][\"Value\"])\n\t\n\t  sheets = json.loads(context['document_text'])\n\t  for sheet in sheets:\n\t    if header_mapping[1][\"Value\"] == sheet[\"name\"]:\n\t      table = sheet[\"table\"]\n\t      break\n\t\n\t  if not table:\n\t    return res\n\texcept:\n\t  return res\n\t\n\theader = table[header_mapping[0][\"Value\"] - 1]\n\ttable = table[header_mapping[0][\"Value\"]:]\n\tcve_idx = header.index(header_mapping[2][\"Value\"])\n\tlikelihood_idx = header.index(header_mapping[3][\"Value\"])\n\tss_uuid_idx = header.index(header_mapping[4][\"Value\"])\n\tsolution_idx = header.index(header_mapping[5][\"Value\"])\n\ttitle_idx = header.index(header_mapping[6][\"Value\"])\n\t\n\tres[0] = {col: \"all others for {col}\" for col in columns}\n\t\n\treturn res",
+        "code": "\t\n\t# Developer note: assume that Extraction_Metadata is correct here. Advanced\n\t#  app will be created in future to get the correct results from Human Review\n\t#  and cascade it the step executing this script\n\t\n\t\n\timport json\n\timport pandas\n\timport io\n\timport re\n\timport requests\n\t\n\tcolumns = [\"cve_id\", \"severity\", \"release_version\", \"ib_service_name\", \"affected_package_name\", \"fixed_version\"]\n\tres = [{col: \"\" for col in columns}]\n\t\n\turl_results_dir = 'https://aihub.instabase.com/api/v2/files/ib-internal/CEM-workspace/fs/Instabase Drive/vulnerabilities-app-results'\n\tapi_key = None\n\ttry:\n\t  api_key = keys['secret']['vulnerabilities_app_key']\n\t  if not api_key or len(api_key) < 10:\n\t    fail = 1 / 0\n\texcept:\n\t  res[0][columns[0]] = \"Error with API Key!\"\n\t  return res\n\theaders = {\n\t  'Authorization': 'Bearer {0}'.format(api_key)\n\t}\n\t\n\textraction_metadata = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE Column\", \"Value\": \"CVE\"}, {\"Item\": \"Likelihood Column\", \"Value\": \"Likelihood\"}, {\"Item\": \"Scan_Source_UID Column\", \"Value\": \"Scan_Source_UID\"}, {\"Item\": \"Solution Column\", \"Value\": \"Solution\"}, {\"Item\": \"Title Column\", \"Value\": \"Title\"}, {\"Item\": \"Extraction ID\", \"Value\": \"BNYM_yyyy_mm_dd_hh:mm:ss_fname.xlsx\"}\n\ttable = None\n\ttry:\n\t  extraction_metadata = json.loads(Extraction_Metadata)\n\t  extraction_metadata[0][\"Value\"] = int(extraction_metadata[0][\"Value\"])\n\t\n\t  sheets = json.loads(context['document_text'])\n\t  for sheet in sheets:\n\t    if extraction_metadata[1][\"Value\"] == sheet[\"name\"]:\n\t      table = sheet[\"table\"]\n\t      break\n\t\n\t  if not table:\n\t    return res\n\texcept:\n\t  return res\n\t\n\theader = table[extraction_metadata[0][\"Value\"] - 1]\n\ttable = table[extraction_metadata[0][\"Value\"]:]\n\tif len(table) < 1:\n\t  return res\n\t\n\tcve_idx = header.index(extraction_metadata[2][\"Value\"])\n\tlikelihood_idx = header.index(extraction_metadata[3][\"Value\"])\n\tss_uuid_idx = header.index(extraction_metadata[4][\"Value\"])\n\tsolution_idx = header.index(extraction_metadata[5][\"Value\"])\n\ttitle_idx = header.index(extraction_metadata[6][\"Value\"])\n\t\n\tdf1 = pandas.DataFrame(table, columns = header)\n\tcol_indices = [cve_idx, likelihood_idx, ss_uuid_idx, solution_idx, title_idx]\n\tdf1 = df1[[header[idx] for idx in col_indices]]\n\t\n\tdf1[\"severity\"] = df1[\"Likelihood\"].map(lambda x: re.findall(r'\\((.*?)\\)', x)).map(lambda x: x[-1] if x else '')\n\tdf1[\"release_version\"] = df1[\"Scan_Source_UID\"].map(lambda x: re.findall(r\":(\\d+\\.\\d+)\", x)).map(lambda x: x[0] if x else '')\n\tdf1[\"ib_service_name\"] = \"TBD\"\n\tdf1[\"affected_package_name\"] = df1[\"Title\"]\n\tdf1[\"fixed_version\"] = df1[\"Solution\"].map(lambda x: re.findall(r\"SOLUTION:(.*)\", x[-50:])).map(lambda x: x[0] if x else '')\n\t\n\tdf = []\n\tfor idx, row in df1.iterrows():\n\t    for cve in row[\"CVE\"].split():\n\t        df.append([cve, row[\"severity\"], row[\"release_version\"], row[\"ib_service_name\"], row[\"affected_package_name\"], row[\"fixed_version\"]])\n\tdf = pandas.DataFrame(df, columns = columns)\n\t\n\tres = df.to_dict('records')\n\t\n\textraction_id = extraction_metadata[-1][\"Value\"] + \".csv\" # BNYM_yyyy_mm_dd_hh:mm:ss_fname.xlsx\n\tdfbuffer = io.BytesIO()\n\tdf.to_csv(dfbuffer, index = False)\n\t'''dfbuffer = io.BytesIO()\n\twith pandas.ExcelWriter(dfbuffer) as writer:\n\t    df.to_excel(writer, sheet_name = \"Sheet1\", index = False)'''\n\tresp = requests.put(\n\t    f\"{url_results_dir}/{extraction_id}\",\n\t    headers = headers,\n\t    data = dfbuffer.getvalue()\n\t)\n\t\n\treturn res",
         "docstring": null,
         "lambda_end_of_life": null,
         "lambda_id": "11",
         "lambda_udf_id": "v1:AWS_LAMBDA:3007242413:insaprd-use2-aihub-prd-docker-default-udf:10",
-        "last_updated_at": "1744323282000",
+        "last_updated_at": "1744823999000",
         "name": "unnamed_custom_function",
         "udf_type": "REFINER"
     },
@@ -52,6 +52,89 @@
         "lambda_id": "11",
         "lambda_udf_id": "v1:AWS_LAMBDA:1428750426:insaprd-use2-aihub-prd-docker-default-udf:10",
         "last_updated_at": "1744400588000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    },
+    "8480": {
+        "args": [
+            {
+                "data_type": "FIELD",
+                "name": "Extraction_Metadata",
+                "value": "Extraction Metadata"
+            },
+            {
+                "data_type": "FIELD",
+                "name": "Intake_Sheet",
+                "value": "Intake Sheet"
+            }
+        ],
+        "code": "\t\n\timport json\n\timport urllib.parse\n\t\n\tintake_sheet = None\n\textraction_metadata = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE Column\", \"Value\": \"CVE\"}, {\"Item\": \"Likelihood Column\", \"Value\": \"Likelihood\"}, {\"Item\": \"Scan_Source_UID Column\", \"Value\": \"Scan_Source_UID\"}, {\"Item\": \"Solution Column\", \"Value\": \"Solution\"}, {\"Item\": \"Title Column\", \"Value\": \"Title\"}, {\"Item\": \"Extraction ID\", \"Value\": \"BNYM_yyyy_mm_dd_hh:mm:ss_fname.xlsx\"}\n\ttry:\n\t  intake_sheet = json.loads(Intake_Sheet)\n\t  if len(intake_sheet) < 1:\n\t    return \"N/A\"\n\t  elif len(intake_sheet) == 1:\n\t    values = \"\".join([f'{v.strip()}' for v in intake_sheet[0].values()])\n\t    if len(values) < 30:\n\t      return \"N/A\"\n\t\n\t  extraction_metadata = json.loads(Extraction_Metadata)\n\t  extraction_id = extraction_metadata[-1][\"Value\"] + \".csv\" # BNYM_yyyy_mm_dd_hh:mm:ss_fname.xlsx\n\t  encoded_id = urllib.parse.quote(extraction_id)\n\t  if len(encoded_id) > 4:\n\t    return f'https://aihub.instabase.com/ib-internal/CEM-workspace/fs/Instabase%20Drive/vulnerabilities-app-results/{encoded_id}'\n\t  else:\n\t    return \"File name is empty!!!\"\n\texcept:\n\t  return \"Error!!!\"\n\t",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:2467980350:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744826723000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    },
+    "8482": {
+        "args": [],
+        "code": "\tk = f\"---{keys['secret']['vulnerabilities_app_key']}---\"\n\tu = f\"---{keys['secret']['vulnerabilities_app_results_dir']}---\"\n\treturn u",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:3166707280:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744662442000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    },
+    "8599": {
+        "args": [],
+        "code": "\timport json\n\tfrom datetime import datetime\n\t\n\tdtime = datetime.now().strftime(\"%Y_%m_%d_%H:%M:%S\")\n\t\n\tfname = context['file_path'].split('/')[-1]\n\tfname = fname.split('__')\n\tfname = fname[0] if len(fname) == 1 else fname[1]\n\t\n\trequired_columns = [\"CVE ID\", \"Severity\", \"Tag\", \"Description\", \"Distro\", \"Repository\", \"Packages\"]\n\t\n\tres = [\n\t  {\"Item\": \"Header Row#\", \"Value\": \"\"},\n\t  {\"Item\": \"Sheet Name\", \"Value\": \"\"}\n\t]\n\tfor col in required_columns:\n\t  res.append({\"Item\": f'{col} Column', \"Value\": \"\"})\n\tres.append({\"Item\": 'Extraction ID', \"Value\": f\"CITI_{dtime}_{fname}\"})\n\t\n\ttry:\n\t  sheet_info = json.loads(context['document_text'])[0]\n\t  res[1][\"Value\"] = sheet_info[\"name\"]\n\t\n\t  table = sheet_info[\"table\"][:10]\n\t  header = None\n\t  header_index = None\n\t  indices = []\n\t  for i, row in enumerate(table):\n\t    for col in required_columns:\n\t      try:\n\t        indices.append(row.index(col))\n\t      except ValueError:\n\t        indices = []\n\t        break\n\t\n\t    if len(indices) == len(required_columns):\n\t      header = row\n\t      header_index = i\n\t      break\n\t\n\t  if header:\n\t    res[0][\"Value\"] = header_index + 1\n\t    for i, idx in enumerate(indices):\n\t      res[i + 2][\"Value\"] = header[idx]\n\t  else:\n\t    fail = 1 / 0\n\texcept:\n\t  for reset in res:\n\t    reset[\"Value\"] = \"\"\n\t\n\treturn res",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:2877900161:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744823940000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    },
+    "8600": {
+        "args": [
+            {
+                "data_type": "FIELD",
+                "name": "Extraction_Metadata",
+                "value": "Extraction Metadata"
+            }
+        ],
+        "code": "\t\n\t# Developer note: assume that Extraction_Metadata is correct here. Advanced\n\t#  app will be created in future to get the correct results from Human Review\n\t#  and cascade it the step executing this script\n\t\n\t\n\timport json\n\timport pandas\n\timport io\n\timport re\n\timport requests\n\t\n\tcolumns = [\"cve_id\", \"severity\", \"release_version\", \"ib_service_name\", \"affected_package_name\", \"fixed_version\"]\n\tres = [{col: \"\" for col in columns}]\n\t\n\turl_results_dir = 'https://aihub.instabase.com/api/v2/files/ib-internal/CEM-workspace/fs/Instabase Drive/vulnerabilities-app-results'\n\tapi_key = None\n\ttry:\n\t  api_key = keys['secret']['vulnerabilities_app_key']\n\t  if not api_key or len(api_key) < 10:\n\t    fail = 1 / 0\n\texcept:\n\t  res[0][columns[0]] = \"Error with API Key!\"\n\t  return res\n\theaders = {\n\t  'Authorization': 'Bearer {0}'.format(api_key)\n\t}\n\t\n\textraction_metadata = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE ID Column\", \"Value\": \"CVE ID\"}, {\"Item\": \"Severity Column\", \"Value\": \"Severity\"}, {\"Item\": \"Tag Column\", \"Value\": \"Tag\"}, {\"Item\": \"Description Column\", \"Value\": \"Description\"}, {\"Item\": \"Distro Column\", \"Value\": \"Distro\"}, {\"Item\": \"Repository Column\", \"Value\": \"Repository\"}, {\"Item\": \"Packages Column\", \"Value\": \"Packages\"}, {\"Item\": \"Extraction ID\", \"Value\": \"CITI_yyyy_mm_dd_hh:mm:ss_fname.xlsx\"}\n\ttable = None\n\ttry:\n\t  extraction_metadata = json.loads(Extraction_Metadata)\n\t  extraction_metadata[0][\"Value\"] = int(extraction_metadata[0][\"Value\"])\n\t\n\t  sheets = json.loads(context['document_text'])\n\t  for sheet in sheets:\n\t    if extraction_metadata[1][\"Value\"] == sheet[\"name\"]:\n\t      table = sheet[\"table\"]\n\t      break\n\t\n\t  if not table:\n\t    return res\n\texcept:\n\t  return res\n\t\n\theader = table[extraction_metadata[0][\"Value\"] - 1]\n\ttable = table[extraction_metadata[0][\"Value\"]:]\n\tif len(table) < 1:\n\t  return res\n\t\n\tcol_indices = []\n\tfor idx in range(2, len(extraction_metadata) - 1):\n\t  col_indices.append(header.index(extraction_metadata[idx][\"Value\"]))\n\t\n\tdf1 = pandas.DataFrame(table, columns = header)\n\tdf1 = df1[[header[idx] for idx in col_indices]]\n\t\n\tdf1[\"severity\"] = df1[\"Severity\"]\n\tdf1[\"release_version\"] = df1[\"Tag\"].map(lambda x: x[:5])\n\tdf1[\"ib_service_name\"] = df1[\"Repository\"]\n\tdf1[\"affected_package_name\"] = df1[\"Distro\"] + \" --- \" + df1[\"Packages\"]\n\tdf1[\"fixed_version\"] = df1[\"Description\"].map(lambda x: x[-100:].lower().split('fixed in')).map(lambda x: x[-1] if len(x) > 1 else '')\n\t\n\tdf = []\n\tfor idx, row in df1.iterrows():\n\t    for cve in row[\"CVE ID\"].split():\n\t        df.append([cve, row[\"severity\"], row[\"release_version\"], row[\"ib_service_name\"], row[\"affected_package_name\"], row[\"fixed_version\"]])\n\tdf = pandas.DataFrame(df, columns = columns)\n\t\n\tres = df.to_dict('records')\n\t\n\textraction_id = extraction_metadata[-1][\"Value\"] + \".csv\" # CITI_yyyy_mm_dd_hh:mm:ss_fname.xlsx\n\tdfbuffer = io.BytesIO()\n\tdf.to_csv(dfbuffer, index = False)\n\t'''dfbuffer = io.BytesIO()\n\twith pandas.ExcelWriter(dfbuffer) as writer:\n\t    df.to_excel(writer, sheet_name = \"Sheet1\", index = False)'''\n\tresp = requests.put(\n\t    f\"{url_results_dir}/{extraction_id}\",\n\t    headers = headers,\n\t    data = dfbuffer.getvalue()\n\t)\n\t\n\treturn res",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:2278252441:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744826649000",
+        "name": "unnamed_custom_function",
+        "udf_type": "REFINER"
+    },
+    "8601": {
+        "args": [
+            {
+                "data_type": "FIELD",
+                "name": "Extraction_Metadata",
+                "value": "Extraction Metadata"
+            },
+            {
+                "data_type": "FIELD",
+                "name": "Intake_Sheet",
+                "value": "Intake Sheet"
+            }
+        ],
+        "code": "\t\n\timport json\n\timport urllib.parse\n\t\n\tintake_sheet = None\n\textraction_metadata = None # {\"Item\": \"Header Row#\", \"Value\": 1}, {\"Item\": \"Sheet Name\", \"Value\": \"Sheet1\"}, {\"Item\": \"CVE ID Column\", \"Value\": \"CVE\"}, ..., {\"Item\": \"Extraction ID\", \"Value\": \"CITI_yyyy_mm_dd_hh:mm:ss_fname.xlsx\"}\n\ttry:\n\t  intake_sheet = json.loads(Intake_Sheet)\n\t  if len(intake_sheet) < 1:\n\t    return \"N/A\"\n\t  elif len(intake_sheet) == 1:\n\t    values = \"\".join([f'{v.strip()}' for v in intake_sheet[0].values()])\n\t    if len(values) < 30:\n\t      return \"N/A\"\n\t\n\t  extraction_metadata = json.loads(Extraction_Metadata)\n\t  extraction_id = extraction_metadata[-1][\"Value\"] + \".csv\" # CITI_yyyy_mm_dd_hh:mm:ss_fname.xlsx\n\t  encoded_id = urllib.parse.quote(extraction_id)\n\t  if len(encoded_id) > 4:\n\t    return f'https://aihub.instabase.com/ib-internal/CEM-workspace/fs/Instabase%20Drive/vulnerabilities-app-results/{encoded_id}'\n\t  else:\n\t    return \"File name is empty!!!\"\n\texcept:\n\t  return \"Error!!!\"\n\t",
+        "docstring": null,
+        "lambda_end_of_life": null,
+        "lambda_id": "11",
+        "lambda_udf_id": "v1:AWS_LAMBDA:4307238431:insaprd-use2-aihub-prd-docker-default-udf:10",
+        "last_updated_at": "1744828364000",
         "name": "unnamed_custom_function",
         "udf_type": "REFINER"
     }

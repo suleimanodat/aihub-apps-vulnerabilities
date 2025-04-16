@@ -15,7 +15,7 @@
                     }
                 ],
                 "model_type": "DEFAULT",
-                "name": "Header Mapping",
+                "name": "Extraction Metadata",
                 "position": 0,
                 "prompt": "",
                 "prompt_schema": null,
@@ -29,8 +29,8 @@
                         "function_args": [
                             {
                                 "data_type": "FIELD",
-                                "name": "Header_Mapping",
-                                "value": "Header Mapping"
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
                             }
                         ],
                         "function_id": 8427,
@@ -45,6 +45,36 @@
                 "prompt": "",
                 "prompt_schema": null,
                 "prompt_type": "udf"
+            },
+            "545622": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
+                            },
+                            {
+                                "data_type": "FIELD",
+                                "name": "Intake_Sheet",
+                                "value": "Intake Sheet"
+                            }
+                        ],
+                        "function_id": 8480,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Results URL",
+                "position": 2,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
             }
         },
         "name": "BNYM"
@@ -56,7 +86,82 @@
     },
     "171384": {
         "description": "A sheet that has header: ASSESSMENT, Discovery Items Assessment, Broadcom Reason (VENDOR DEPENDENT), Severity, Implication/Risk of having critical, Repository, Tag, Scan Time, Pass, Type, Distro, CVE ID, Compliance ID, Type_1, Severity22, Packages, Source Package, Package Version, Package License, CVSS, Fix Status, Fix Date, Grace Days, Vulnerability Tags, Description, Cause, Published, Custom Labels, Vulnerability Link, Unique Identifier",
-        "fields": {},
+        "fields": {
+            "558131": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [],
+                        "function_id": 8599,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Extraction Metadata",
+                "position": 0,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            },
+            "558132": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
+                            }
+                        ],
+                        "function_id": 8600,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Intake Sheet",
+                "position": 1,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            },
+            "558166": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
+                            },
+                            {
+                                "data_type": "FIELD",
+                                "name": "Intake_Sheet",
+                                "value": "Intake Sheet"
+                            }
+                        ],
+                        "function_id": 8601,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Results URL",
+                "position": 2,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            }
+        },
         "name": "CITI"
     },
     "171455": {
@@ -69,6 +174,6 @@
         "fields": {},
         "name": "BOFA Twistlock_Scan"
     },
-    "last_edited_at": "1744408101000",
+    "last_edited_at": "1744828364000",
     "last_edited_class_at": "1744301030000"
 }
