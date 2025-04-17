@@ -22,5 +22,5 @@
     "testing": {
         "regression": {}
     },
-    "release_notes": "BNYM scripts done (tested with 0.0.4). CITI scripts done (need testing after BOFA scan classes/fields to be done)"
+    "release_notes": "Published 1.0.0 - Finalized logic to classify vulnerabilities files from BNYM, CITI, BOFA Snaky Scan and BOFA Twistlock Scan, and to extract the required information for each class."
 }
