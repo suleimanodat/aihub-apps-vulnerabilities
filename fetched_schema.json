@@ -166,14 +166,164 @@
     },
     "171455": {
         "description": "A sheet that has header: ISSUE_SEVERITY_RANK, ISSUE_SEVERITY, PROBLEM_TITLE, CVE, PROJECT_NAME, PRODUCT_NAME, PACKAGE_NAME_AND_VERSION, SEMVER_VULNERABLE_RANGE",
-        "fields": {},
+        "fields": {
+            "558243": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [],
+                        "function_id": 8603,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Extraction Metadata",
+                "position": 0,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            },
+            "558245": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
+                            }
+                        ],
+                        "function_id": 8677,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Intake Sheet",
+                "position": 1,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            },
+            "558247": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
+                            },
+                            {
+                                "data_type": "FIELD",
+                                "name": "Intake_Sheet",
+                                "value": "Intake Sheet"
+                            }
+                        ],
+                        "function_id": 8678,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Results URL",
+                "position": 2,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            }
+        },
         "name": "BOFA Snyk_Scan"
     },
     "171486": {
         "description": "A sheet that has header: Registry, Repository, Tag, Id, Scan Time, Pass, Type, Distro, Hostname, Layer, CVE ID, Compliance ID, Type, Severity, Packages, Source Package, Package Version, Package License, CVSS, Fix Status, Fix Date, Grace Days, Vulnerability Tags, Description, Cause, Published, Custom Labels, Vulnerability Link",
-        "fields": {},
+        "fields": {
+            "558244": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [],
+                        "function_id": 8604,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Extraction Metadata",
+                "position": 0,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            },
+            "558246": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
+                            }
+                        ],
+                        "function_id": 8605,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Intake Sheet",
+                "position": 1,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            },
+            "558248": {
+                "data_type": "TEXT",
+                "description": "",
+                "lines": [
+                    {
+                        "function_args": [
+                            {
+                                "data_type": "FIELD",
+                                "name": "Extraction_Metadata",
+                                "value": "Extraction Metadata"
+                            },
+                            {
+                                "data_type": "FIELD",
+                                "name": "Intake_Sheet",
+                                "value": "Intake Sheet"
+                            }
+                        ],
+                        "function_id": 8606,
+                        "line_type": "UDF",
+                        "native_fn_name": null,
+                        "prompt": null
+                    }
+                ],
+                "model_type": "DEFAULT",
+                "name": "Results URL",
+                "position": 2,
+                "prompt": "",
+                "prompt_schema": null,
+                "prompt_type": "udf"
+            }
+        },
         "name": "BOFA Twistlock_Scan"
     },
-    "last_edited_at": "1744828364000",
+    "last_edited_at": "1744921763000",
     "last_edited_class_at": "1744301030000"
 }
