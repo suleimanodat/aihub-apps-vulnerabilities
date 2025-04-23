@@ -45,36 +45,6 @@
                 "prompt": "",
                 "prompt_schema": null,
                 "prompt_type": "udf"
-            },
-            "545622": {
-                "data_type": "TEXT",
-                "description": "",
-                "lines": [
-                    {
-                        "function_args": [
-                            {
-                                "data_type": "FIELD",
-                                "name": "Extraction_Metadata",
-                                "value": "Extraction Metadata"
-                            },
-                            {
-                                "data_type": "FIELD",
-                                "name": "Intake_Sheet",
-                                "value": "Intake Sheet"
-                            }
-                        ],
-                        "function_id": 8480,
-                        "line_type": "UDF",
-                        "native_fn_name": null,
-                        "prompt": null
-                    }
-                ],
-                "model_type": "DEFAULT",
-                "name": "Results URL",
-                "position": 2,
-                "prompt": "",
-                "prompt_schema": null,
-                "prompt_type": "udf"
             }
         },
         "name": "BNYM"
@@ -130,36 +100,6 @@
                 "prompt": "",
                 "prompt_schema": null,
                 "prompt_type": "udf"
-            },
-            "558166": {
-                "data_type": "TEXT",
-                "description": "",
-                "lines": [
-                    {
-                        "function_args": [
-                            {
-                                "data_type": "FIELD",
-                                "name": "Extraction_Metadata",
-                                "value": "Extraction Metadata"
-                            },
-                            {
-                                "data_type": "FIELD",
-                                "name": "Intake_Sheet",
-                                "value": "Intake Sheet"
-                            }
-                        ],
-                        "function_id": 8601,
-                        "line_type": "UDF",
-                        "native_fn_name": null,
-                        "prompt": null
-                    }
-                ],
-                "model_type": "DEFAULT",
-                "name": "Results URL",
-                "position": 2,
-                "prompt": "",
-                "prompt_schema": null,
-                "prompt_type": "udf"
             }
         },
         "name": "CITI"
@@ -207,36 +147,6 @@
                 "model_type": "DEFAULT",
                 "name": "Intake Sheet",
                 "position": 1,
-                "prompt": "",
-                "prompt_schema": null,
-                "prompt_type": "udf"
-            },
-            "558247": {
-                "data_type": "TEXT",
-                "description": "",
-                "lines": [
-                    {
-                        "function_args": [
-                            {
-                                "data_type": "FIELD",
-                                "name": "Extraction_Metadata",
-                                "value": "Extraction Metadata"
-                            },
-                            {
-                                "data_type": "FIELD",
-                                "name": "Intake_Sheet",
-                                "value": "Intake Sheet"
-                            }
-                        ],
-                        "function_id": 8678,
-                        "line_type": "UDF",
-                        "native_fn_name": null,
-                        "prompt": null
-                    }
-                ],
-                "model_type": "DEFAULT",
-                "name": "Results URL",
-                "position": 2,
                 "prompt": "",
                 "prompt_schema": null,
                 "prompt_type": "udf"
@@ -290,40 +200,10 @@
                 "prompt": "",
                 "prompt_schema": null,
                 "prompt_type": "udf"
-            },
-            "558248": {
-                "data_type": "TEXT",
-                "description": "",
-                "lines": [
-                    {
-                        "function_args": [
-                            {
-                                "data_type": "FIELD",
-                                "name": "Extraction_Metadata",
-                                "value": "Extraction Metadata"
-                            },
-                            {
-                                "data_type": "FIELD",
-                                "name": "Intake_Sheet",
-                                "value": "Intake Sheet"
-                            }
-                        ],
-                        "function_id": 8606,
-                        "line_type": "UDF",
-                        "native_fn_name": null,
-                        "prompt": null
-                    }
-                ],
-                "model_type": "DEFAULT",
-                "name": "Results URL",
-                "position": 2,
-                "prompt": "",
-                "prompt_schema": null,
-                "prompt_type": "udf"
             }
         },
         "name": "BOFA Twistlock_Scan"
     },
-    "last_edited_at": "1744921763000",
+    "last_edited_at": "1745429052000",
     "last_edited_class_at": "1744301030000"
 }
