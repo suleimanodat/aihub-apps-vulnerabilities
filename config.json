@@ -22,5 +22,5 @@
     "testing": {
         "regression": {}
     },
-    "release_notes": "Published 1.0.0 - Finalized logic to classify vulnerabilities files from BNYM, CITI, BOFA Snaky Scan and BOFA Twistlock Scan, and to extract the required information for each class."
+    "release_notes": "Published 1.0.1 - Removed reference to API Key (results will be downloaded from UI), renamed headers and added logic to package_name and package_installed_version"
 }
